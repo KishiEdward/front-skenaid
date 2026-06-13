@@ -36,11 +36,13 @@ class _BiometricLockScreenState extends State<BiometricLockScreen>
     final provider = context.read<BiometricLockProvider>();
 
     if (state == AppLifecycleState.paused) {
-      _backgroundedAt = DateTime.now();
+      if (!provider.isLocked) {
+        _backgroundedAt = DateTime.now();
+      }
     } else if (state == AppLifecycleState.resumed) {
-      final backgrounded = _backgroundedAt;
-      if (backgrounded != null) {
-        final elapsed = DateTime.now().difference(backgrounded);
+      if (_backgroundedAt != null) {
+        final elapsed = DateTime.now().difference(_backgroundedAt!);
+        _backgroundedAt = null;
         if (elapsed >= _lockTimeout) {
           provider.lock();
           provider.unlock();
