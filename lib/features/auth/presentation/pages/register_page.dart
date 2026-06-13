@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:email_validator/email_validator.dart';
 import '../../../../core/routes/app_router.dart';
-import '../../../../core/constants/app_colors.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
@@ -24,7 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passCtrl = TextEditingController();
   final _pass2Ctrl = TextEditingController();
   bool _showPass = false;
-  bool _agreeTerms = false;
+  final bool _agreeTerms = false;
 
   @override
   void dispose() {
@@ -148,67 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   validator: (v) =>
                       v != _passCtrl.text ? 'Password tidak cocok' : null,
                 ),
-                const SizedBox(height: 24),
-
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: Checkbox(
-                          value: _agreeTerms,
-                          onChanged: (val) =>
-                              setState(() => _agreeTerms = val!),
-                          activeColor: AppColors.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: RichText(
-                          text: TextSpan(
-                            style: const TextStyle(
-                              color: Colors.black87,
-                              fontSize: 13,
-                              height: 1.5,
-                            ),
-                            children: [
-                              const TextSpan(text: 'Saya setuju dengan '),
-                              TextSpan(
-                                text: 'Syarat & Ketentuan',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              const TextSpan(text: ' serta '),
-                              TextSpan(
-                                text: 'Kebijakan Privasi',
-                                style: const TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                              const TextSpan(text: ' Skena.id'),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 36),
 
                 CustomButton(
                   label: 'Buat Akun',
