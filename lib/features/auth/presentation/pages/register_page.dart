@@ -1,15 +1,18 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:email_validator/email_validator.dart';
 import '../../../../core/routes/app_router.dart';
+import '../../../../core/constants/app_colors.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/auth_header.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/loading_overlay.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
+
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -21,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passCtrl = TextEditingController();
   final _pass2Ctrl = TextEditingController();
   bool _showPass = false;
+  bool _agreeTerms = false;
 
   @override
   void dispose() {
@@ -33,6 +37,15 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
+    if (!_agreeTerms) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Anda harus menyetujui Syarat & Ketentuan'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
 
     final auth = context.read<AuthProvider>();
     final success = await auth.register(
@@ -62,98 +75,148 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading: isLoading,
       message: 'Mendaftarkan akun...',
       child: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  const SizedBox(height: 32),
-                  const AuthHeader(
-                    icon: Icons.person_add_alt_1,
-                    title: 'Buat Akun Baru',
-                    subtitle: 'Lengkapi data diri Anda untuk mendaftar',
-                  ),
-                  const SizedBox(height: 32),
-                  CustomTextField(
-                    label: 'Nama Lengkap',
-                    hint: 'Masukkan nama lengkap',
-                    controller: _nameCtrl,
-                    prefixIcon: const Icon(Icons.person_outline),
-                    validator: (v) =>
-                        (v?.isEmpty ?? true) ? 'Nama wajib diisi' : null,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    label: 'Email',
-                    hint: 'contoh@email.com',
-                    controller: _emailCtrl,
-                    keyboardType: TextInputType.emailAddress,
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    validator: (v) {
-                      if (v?.isEmpty ?? true) return 'Email wajib diisi';
-                      if (!EmailValidator.validate(v!)) {
-                        return 'Format email salah';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    label: 'Password',
-                    hint: 'Minimal 8 karakter',
-                    controller: _passCtrl,
-                    obscureText: !_showPass,
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _showPass ? Icons.visibility_off : Icons.visibility,
-                      ),
-                      onPressed: () => setState(() => _showPass = !_showPass),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Buat Akun Baru',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Daftar gratis, belanja aksesoris kapan saja',
+                  style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                ),
+                const SizedBox(height: 40),
+
+                CustomTextField(
+                  label: 'Nama Lengkap',
+                  hint: 'Misal: Dzidan Rafi Habibie',
+                  controller: _nameCtrl,
+                  suffixIcon: const Icon(Icons.person_outline),
+                  validator: (v) => (v?.isEmpty ?? true) ? 'Wajib diisi' : null,
+                ),
+                const SizedBox(height: 20),
+
+                CustomTextField(
+                  label: 'Email',
+                  hint: 'dzidan@email.com',
+                  controller: _emailCtrl,
+                  keyboardType: TextInputType.emailAddress,
+                  suffixIcon: const Icon(Icons.email_outlined),
+                  validator: (v) => (v?.isEmpty ?? true)
+                      ? 'Wajib diisi'
+                      : (!EmailValidator.validate(v!) ? 'Format salah' : null),
+                ),
+                const SizedBox(height: 20),
+
+                CustomTextField(
+                  label: 'Kata Sandi',
+                  hint: '••••••••',
+                  controller: _passCtrl,
+                  obscureText: !_showPass,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showPass ? Icons.visibility_off : Icons.visibility,
                     ),
-                    validator: (v) => (v?.length ?? 0) < 8
-                        ? 'Password minimal 8 karakter'
-                        : null,
+                    onPressed: () => setState(() => _showPass = !_showPass),
                   ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
-                    label: 'Konfirmasi Password',
-                    hint: 'Ulangi password',
-                    controller: _pass2Ctrl,
-                    obscureText: !_showPass,
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    validator: (v) =>
-                        v != _passCtrl.text ? 'Password tidak cocok' : null,
+                  validator: (v) =>
+                      (v?.length ?? 0) < 8 ? 'Minimal 8 karakter' : null,
+                ),
+                const SizedBox(height: 20),
+
+                CustomTextField(
+                  label: 'Konfirmasi Kata Sandi',
+                  hint: '••••••••',
+                  controller: _pass2Ctrl,
+                  obscureText: !_showPass,
+                  suffixIcon: const Icon(Icons.check, color: Colors.green),
+                  validator: (v) =>
+                      v != _passCtrl.text ? 'Password tidak cocok' : null,
+                ),
+                const SizedBox(height: 24),
+
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  const SizedBox(height: 28),
-                  CustomButton(
-                    label: 'Daftar Sekarang',
-                    onPressed: _register,
-                    isLoading: isLoading,
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Sudah punya akun? '),
-                      GestureDetector(
-                        onTap: () => Navigator.pushReplacementNamed(
-                          context,
-                          AppRouter.login,
+                      SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Checkbox(
+                          value: _agreeTerms,
+                          onChanged: (val) =>
+                              setState(() => _agreeTerms = val!),
+                          activeColor: AppColors.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                         ),
-                        child: const Text(
-                          'Masuk',
-                          style: TextStyle(
-                            color: Color(0xFF1565C0),
-                            fontWeight: FontWeight.bold,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: RichText(
+                          text: TextSpan(
+                            style: const TextStyle(
+                              color: Colors.black87,
+                              fontSize: 13,
+                              height: 1.5,
+                            ),
+                            children: [
+                              const TextSpan(text: 'Saya setuju dengan '),
+                              TextSpan(
+                                text: 'Syarat & Ketentuan',
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              const TextSpan(text: ' serta '),
+                              TextSpan(
+                                text: 'Kebijakan Privasi',
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                              const TextSpan(text: ' Skena.id'),
+                            ],
                           ),
                         ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 32),
+
+                CustomButton(
+                  label: 'Buat Akun',
+                  onPressed: _register,
+                  isLoading: isLoading,
+                ),
+                const SizedBox(height: 32),
+              ],
             ),
           ),
         ),
