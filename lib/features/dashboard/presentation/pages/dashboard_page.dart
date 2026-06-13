@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -53,8 +55,9 @@ class _DashboardPageState extends State<DashboardPage> {
               onTap: () async {
                 Navigator.pop(context);
                 await context.read<AuthProvider>().logout();
-                if (mounted)
+                if (mounted) {
                   Navigator.pushReplacementNamed(context, AppRouter.login);
+                }
               },
             ),
           ],
@@ -313,7 +316,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           product.imageUrl,
                           width: double.infinity,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) =>
+                          errorBuilder: (_, _, _) =>
                               const Icon(Icons.image, color: Colors.grey),
                         ),
                       )
