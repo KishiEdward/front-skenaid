@@ -5,6 +5,7 @@ import '../../features/auth/presentation/pages/verify_email_page.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/dashboard/presentation/pages/product_detail_page.dart';
 import '../../features/dashboard/data/models/product_model.dart';
+import '../../features/dashboard/presentation/pages/splash_page.dart';
 
 class AppRouter {
   static const String login = '/login';
@@ -12,11 +13,14 @@ class AppRouter {
   static const String verifyEmail = '/verify-email';
   static const String dashboard = '/dashboard';
   static const String productDetail = '/product-detail';
+  static const String splash = '/splash';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
+      case splash:
+        return MaterialPageRoute(builder: (_) => const SplashPage());
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterPage());
       case verifyEmail:
