@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 CustomTextField(
                   label: 'Nama Lengkap',
-                  hint: 'Misal: Dzidan Rafi Habibie',
+                  hint: 'Tulis nama anda',
                   controller: _nameCtrl,
                   suffixIcon: const Icon(Icons.person_outline),
                   validator: (v) => (v?.isEmpty ?? true) ? 'Wajib diisi' : null,
@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 CustomTextField(
                   label: 'Email',
-                  hint: 'dzidan@email.com',
+                  hint: 'example@email.com',
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   suffixIcon: const Icon(Icons.email_outlined),
