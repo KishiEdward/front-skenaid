@@ -5,25 +5,22 @@ import 'firebase_options.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/routes/app_router.dart';
-import 'core/services/secure_storage.dart';
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/dashboard/presentation/providers/product_provider.dart';
+
+import 'core/services/biometric_lock_provider.dart';
+import 'core/widgets/biometric_lock_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  final token = await SecureStorageService.getToken();
-  final initialRoute = token != null ? AppRouter.dashboard : AppRouter.login;
-
-  runApp(MyApp(initialRoute: AppRouter.splash));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final String initialRoute;
-
-  const MyApp({super.key, required this.initialRoute});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +28,18 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(
+          create: (_) => BiometricLockProvider()..initialize(),
+        ),
       ],
-      child: MaterialApp(
-        title: 'Skena.id App',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light,
-        initialRoute: initialRoute,
-        onGenerateRoute: AppRouter.generateRoute,
+      child: BiometricLockScreen(
+        child: MaterialApp(
+          title: 'Skena.id App',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          initialRoute: AppRouter.splash,
+          onGenerateRoute: AppRouter.generateRoute,
+        ),
       ),
     );
   }
