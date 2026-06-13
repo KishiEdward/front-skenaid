@@ -23,7 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passCtrl = TextEditingController();
   final _pass2Ctrl = TextEditingController();
   bool _showPass = false;
-  final bool _agreeTerms = false;
 
   @override
   void dispose() {
@@ -36,15 +35,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
-    if (!_agreeTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Anda harus menyetujui Syarat & Ketentuan'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
 
     final auth = context.read<AuthProvider>();
     final success = await auth.register(
