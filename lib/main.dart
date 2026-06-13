@@ -32,14 +32,13 @@ class MyApp extends StatelessWidget {
           create: (_) => BiometricLockProvider()..initialize(),
         ),
       ],
-      child: BiometricLockScreen(
-        child: MaterialApp(
-          title: 'Skena.id App',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light,
-          initialRoute: AppRouter.splash,
-          onGenerateRoute: AppRouter.generateRoute,
-        ),
+      child: MaterialApp(
+        title: 'Skena.id App',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        initialRoute: AppRouter.splash,
+        onGenerateRoute: AppRouter.generateRoute,
+        builder: (context, child) => BiometricLockScreen(child: child!),
       ),
     );
   }
