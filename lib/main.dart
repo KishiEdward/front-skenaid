@@ -17,7 +17,7 @@ void main() async {
   final token = await SecureStorageService.getToken();
   final initialRoute = token != null ? AppRouter.dashboard : AppRouter.login;
 
-  runApp(MyApp(initialRoute: initialRoute));
+  runApp(MyApp(initialRoute: AppRouter.splash));
 }
 
 class MyApp extends StatelessWidget {

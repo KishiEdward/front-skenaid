@@ -9,7 +9,6 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
-  final bool enabled;
 
   const CustomTextField({
     super.key,
@@ -21,7 +20,6 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.suffixIcon,
     this.prefixIcon,
-    this.enabled = true,
   });
 
   @override
@@ -29,30 +27,24 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-        ),
-        const SizedBox(height: 6),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black87)),
+        const SizedBox(height: 8),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
           validator: validator,
           keyboardType: keyboardType,
-          enabled: enabled,
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: hint,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
+            hintStyle: TextStyle(color: Colors.grey.shade500),
+            prefixIcon: prefixIcon != null ? IconTheme(data: IconThemeData(color: Colors.grey.shade400), child: prefixIcon!) : null,
+            suffixIcon: suffixIcon != null ? IconTheme(data: IconThemeData(color: Colors.grey.shade400), child: suffixIcon!) : null,
             filled: true,
-            fillColor: Colors.grey.shade50,
+            fillColor: const Color(0xFF333333),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -60,12 +52,9 @@ class CustomTextField extends StatelessWidget {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.red),
+              borderSide: const BorderSide(color: Colors.red, width: 1.5),
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
         ),
       ],
