@@ -3,12 +3,15 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/verify_email_page.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
+import '../../features/dashboard/presentation/pages/product_detail_page.dart';
+import '../../features/dashboard/data/models/product_model.dart';
 
 class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String verifyEmail = '/verify-email';
   static const String dashboard = '/dashboard';
+  static const String productDetail = '/product-detail';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -20,6 +23,11 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const VerifyEmailPage());
       case dashboard:
         return MaterialPageRoute(builder: (_) => const DashboardPage());
+      case productDetail:
+        final product = settings.arguments as ProductModel;
+        return MaterialPageRoute(
+          builder: (_) => ProductDetailPage(product: product),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
