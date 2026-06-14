@@ -11,6 +11,9 @@ import 'features/dashboard/presentation/providers/product_provider.dart';
 import 'core/services/biometric_lock_provider.dart';
 import 'core/widgets/biometric_lock_screen.dart';
 
+import 'features/cart/presentation/providers/cart_provider.dart';
+import 'features/order/presentation/providers/order_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -31,6 +34,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => BiometricLockProvider()..initialize(),
         ),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: MaterialApp(
         title: 'Skena.id App',
