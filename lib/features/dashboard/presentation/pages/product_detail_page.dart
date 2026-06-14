@@ -1,8 +1,10 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../data/models/product_model.dart';
+import '../../../cart/presentation/providers/cart_provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final ProductModel product;
@@ -17,6 +19,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = context.watch<CartProvider>().isLoading;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -29,7 +33,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ],
       ),
@@ -176,6 +182,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
             ),
           ),
+
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
@@ -222,7 +229,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            final ok = await context
+                                .read<CartProvider>()
+                                .addToCart(widget.product.id, _quantity);
+
+                            if (mounted) {
+                              if (ok) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Berhasil ditambah ke keranjang',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: Duration(seconds: 1),
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              } else {
+                                final error = context
+                                    .read<CartProvider>()
+                                    .errorMessage;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(error ?? 'Gagal menambahkan'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            }
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -230,14 +268,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      'Tambah ke Keranjang',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text(
+                            'Tambah ke Keranjang',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
                   ),
                 ),
               ],
