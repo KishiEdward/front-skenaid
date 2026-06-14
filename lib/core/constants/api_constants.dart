@@ -10,4 +10,9 @@ class ApiConstants {
   // Timeout
   static const int connectTimeout = 15000;
   static const int receiveTimeout = 15000;
+
+  // Endpoints untuk fitur keranjang dan pesanan
+  static const String cart = '/cart';
+  static const String orders = '/orders';
+  static const String checkout = '/orders/checkout';
 }
