@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skenaid_front/core/routes/app_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../providers/cart_provider.dart';
 
@@ -93,11 +94,7 @@ class _CartPageState extends State<CartPage> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Lanjut ke Checkout...'),
-                          ),
-                        );
+                        Navigator.pushNamed(context, AppRouter.checkout);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
@@ -206,8 +203,7 @@ class _CartPageState extends State<CartPage> {
                         color: Colors.red,
                         size: 20,
                       ),
-                      onPressed: () =>
-                          provider.removeCartItem(item.id),
+                      onPressed: () => provider.removeCartItem(item.id),
                       constraints: const BoxConstraints(),
                       padding: EdgeInsets.zero,
                     ),

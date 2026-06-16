@@ -6,6 +6,8 @@ import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/dashboard/presentation/pages/product_detail_page.dart';
 import '../../features/dashboard/data/models/product_model.dart';
 import '../../features/dashboard/presentation/pages/splash_page.dart';
+import '../../features/order/presentation/pages/checkout_page.dart';
+import '../../features/order/data/models/order_model.dart';
 
 class AppRouter {
   static const String login = '/login';
@@ -14,6 +16,10 @@ class AppRouter {
   static const String dashboard = '/dashboard';
   static const String productDetail = '/product-detail';
   static const String splash = '/splash';
+  static const String checkout = '/checkout';
+  static const String orderSuccess = '/order-success';
+  static const String paymentPending = '/payment-pending';
+  static const String myOrders = '/my-orders';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -32,6 +38,36 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => ProductDetailPage(product: product),
         );
+      case checkout:
+        return MaterialPageRoute(builder: (_) => const CheckoutPage());
+
+      case orderSuccess:
+        final order = settings.arguments as OrderModel;
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body: Center(
+              child: Text('Sukses Checkout! Order ID: #${order.id}'),
+            ),
+          ),
+        );
+
+      case paymentPending:
+        final order = settings.arguments as OrderModel;
+        return MaterialPageRoute(
+          builder: (_) => Scaffold(
+            body: Center(
+              child: Text('Menunggu Pembayaran untuk Order #${order.id}'),
+            ),
+          ),
+        );
+
+      case myOrders:
+        return MaterialPageRoute(
+          builder: (_) => const Scaffold(
+            body: Center(child: Text('Halaman Riwayat Pesanan')),
+          ),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(
