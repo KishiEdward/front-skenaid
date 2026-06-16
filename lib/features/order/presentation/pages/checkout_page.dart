@@ -4,6 +4,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../cart/presentation/providers/cart_provider.dart';
 import '../providers/order_provider.dart';
+import '../../../profile/presentation/providers/profile_provider.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -16,10 +17,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final PageController _pageController = PageController();
   int _currentStep = 0;
 
-  final String _selectedAddress =
-      "Jl. Sudirman No. 123, Karet Tengsin, Tanah Abang, Jakarta Pusat 10250\n+62 812 3456 7890";
+  String _selectedAddress = "";
   String _selectedShipping = "JNE Express";
   String _selectedPaymentMethod = "";
+
+  @override
+  void initState() {
+    super.initState();
+    final user = context.read<ProfileProvider>().user;
+    if (user != null) {
+      _selectedAddress = "${user.address}\n${user.phone}";
+    }
+  }
 
   @override
   void dispose() {
@@ -169,6 +178,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Widget _buildStep1Address() {
     final cart = context.watch<CartProvider>().cart;
+    final user = context.watch<ProfileProvider>().user;
+    final userName = user?.name ?? 'Nama User';
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -214,9 +226,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            'Rina Kusuma',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Text(
+                            userName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -404,6 +416,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Widget _buildStep3Confirmation() {
     final cart = context.watch<CartProvider>().cart;
+    final user = context.watch<ProfileProvider>().user;
+    final userName = user?.name ?? 'Nama User';
+    final userPhone = user?.phone ?? '';
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -489,9 +505,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Rina Kusuma • +62 812 3456 7890',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  '$userName • $userPhone',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Text(

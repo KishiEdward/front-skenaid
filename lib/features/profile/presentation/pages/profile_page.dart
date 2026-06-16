@@ -1,10 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/routes/app_router.dart';
 import '../providers/profile_provider.dart';
+import '../../../auth/presentation/providers/auth_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,13 +16,23 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      context.read<ProfileProvider>().fetchProfile();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProv = context.read<AuthProvider>();
+      if (authProv.firebaseUser != null) {
+        context.read<ProfileProvider>().fetchProfile();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final authProv = context.watch<AuthProvider>();
+    final isGuest = authProv.firebaseUser == null;
+
+    if (isGuest) {
+      return _buildGuestView(context);
+    }
+
     final profileProv = context.watch<ProfileProvider>();
     final user = profileProv.user;
 
@@ -135,9 +144,103 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 12),
+
+                  Container(
+                    color: Colors.white,
+                    child: _buildMenuTile(
+                      icon: Icons.logout,
+                      title: 'Keluar',
+                      subtitle: 'Akhiri sesi akunmu',
+                      iconColor: Colors.red,
+                      textColor: Colors.red,
+                      hideTrailing: true,
+                      onTap: () => _showLogoutDialog(context),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
+    );
+  }
+
+  Widget _buildGuestView(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          'Profil Saya',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.05),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.lock_person_outlined,
+                  size: 80,
+                  color: AppColors.primary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Ups, kamu belum login!',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Silakan masuk atau daftar akun terlebih dahulu untuk melihat profil, melacak pesanan, dan mengatur alamat pengirimanmu.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRouter.login,
+                      (route) => false,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Masuk / Daftar Sekarang',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -145,6 +248,9 @@ class _ProfilePageState extends State<ProfilePage> {
     required IconData icon,
     required String title,
     String? subtitle,
+    Color iconColor = AppColors.primary,
+    Color textColor = Colors.black87,
+    bool hideTrailing = false,
     required VoidCallback onTap,
   }) {
     return ListTile(
@@ -152,14 +258,18 @@ class _ProfilePageState extends State<ProfilePage> {
       leading: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.1),
+          color: iconColor.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: AppColors.primary),
+        child: Icon(icon, color: iconColor),
       ),
       title: Text(
         title,
-        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: textColor,
+        ),
       ),
       subtitle: subtitle != null
           ? Text(
@@ -169,8 +279,50 @@ class _ProfilePageState extends State<ProfilePage> {
               overflow: TextOverflow.ellipsis,
             )
           : null,
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: hideTrailing
+          ? null
+          : const Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text(
+          'Keluar Akun',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text('Apakah kamu yakin ingin keluar dari Skena.id?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal', style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await context.read<AuthProvider>().logout();
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRouter.login,
+                  (route) => false,
+                );
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text('Keluar', style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skenaid_front/features/profile/presentation/pages/profile_page.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/routes/app_router.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -25,50 +26,14 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ProductProvider>().fetchProducts();
-      context
-          .read<CartProvider>()
-          .fetchCart();
+      context.read<CartProvider>().fetchCart();
     });
   }
 
   void _onItemTapped(int index) {
-    if (index == 2) {
-      _showProfileMenu();
-    } else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  }
-
-  void _showProfileMenu() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text(
-                'Keluar (Logout)',
-                style: TextStyle(color: Colors.red),
-              ),
-              onTap: () async {
-                Navigator.pop(context);
-                await context.read<AuthProvider>().logout();
-                if (mounted) {
-                  Navigator.pushReplacementNamed(context, AppRouter.login);
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -76,6 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final List<Widget> pages = [
       _buildHomeView(),
       const CartPage(),
+      const ProfilePage(),
     ];
 
     final cartCount = context.watch<CartProvider>().cart?.itemCount ?? 0;
