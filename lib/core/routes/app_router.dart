@@ -8,6 +8,7 @@ import '../../features/dashboard/data/models/product_model.dart';
 import '../../features/dashboard/presentation/pages/splash_page.dart';
 import '../../features/order/presentation/pages/checkout_page.dart';
 import '../../features/order/data/models/order_model.dart';
+import '../../features/order/presentation/pages/order_success_page.dart';
 
 class AppRouter {
   static const String login = '/login';
@@ -44,11 +45,7 @@ class AppRouter {
       case orderSuccess:
         final order = settings.arguments as OrderModel;
         return MaterialPageRoute(
-          builder: (_) => Scaffold(
-            body: Center(
-              child: Text('Sukses Checkout! Order ID: #${order.id}'),
-            ),
-          ),
+          builder: (_) => Scaffold(body: OrderSuccessPage(order: order)),
         );
 
       case paymentPending:
