@@ -4,6 +4,7 @@ class OrderItemModel {
   final double price;
   final int quantity;
   final double subtotal;
+  final String productImage;
 
   OrderItemModel({
     required this.productId,
@@ -11,15 +12,24 @@ class OrderItemModel {
     required this.price,
     required this.quantity,
     required this.subtotal,
+    this.productImage = '',
   });
 
-  factory OrderItemModel.fromJson(Map<String, dynamic> json) => OrderItemModel(
-    productId: json['product_id'] as int? ?? 0,
-    productName: json['product_name'] as String? ?? '',
-    price: (json['price'] as num?)?.toDouble() ?? 0.0,
-    quantity: json['quantity'] as int? ?? 0,
-    subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
-  );
+  factory OrderItemModel.fromJson(Map<String, dynamic> json) {
+    String imageUrl = '';
+    if (json['product'] != null && json['product']['image_url'] != null) {
+      imageUrl = json['product']['image_url'];
+    }
+
+    return OrderItemModel(
+      productId: json['product_id'] as int? ?? 0,
+      productName: json['product_name'] as String? ?? '',
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      quantity: json['quantity'] as int? ?? 0,
+      subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
+      productImage: imageUrl,
+    );
+  }
 }
 
 class OrderModel {

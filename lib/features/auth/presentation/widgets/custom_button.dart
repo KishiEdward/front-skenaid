@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/constants/app_colors.dart'; 
 
 enum ButtonVariant { primary, outlined, text }
 
@@ -9,6 +10,7 @@ class CustomButton extends StatelessWidget {
   final ButtonVariant variant;
   final Widget? icon;
 
+  // HAPUS "MaterialColor pink," dari sini
   const CustomButton({
     super.key,
     required this.label,
@@ -48,31 +50,31 @@ class CustomButton extends StatelessWidget {
       height: 52,
       child: switch (variant) {
         ButtonVariant.primary => ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF1565C0),
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+            onPressed: isLoading ? null : onPressed,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary, // <--- UBAH JADI INI
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
             ),
-            elevation: 2,
+            child: child,
           ),
-          child: child,
-        ),
         ButtonVariant.outlined => OutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: Color(0xFF1565C0), width: 1.5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+            onPressed: isLoading ? null : onPressed,
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColors.primary, width: 1.5), // <--- UBAH JADI INI
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
+            child: child,
           ),
-          child: child,
-        ),
         ButtonVariant.text => TextButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        ),
+            onPressed: isLoading ? null : onPressed,
+            child: child,
+          ),
       },
     );
   }
