@@ -50,7 +50,7 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final url = Uri.parse('${ApiConstants.baseUrl}/v1/orders');
+      final url = Uri.parse('${ApiConstants.baseUrl}/orders');
       final response = await http.get(
         url,
         headers: {

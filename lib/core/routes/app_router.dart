@@ -9,6 +9,7 @@ import '../../features/dashboard/presentation/pages/splash_page.dart';
 import '../../features/order/presentation/pages/checkout_page.dart';
 import '../../features/order/data/models/order_model.dart';
 import '../../features/order/presentation/pages/order_success_page.dart';
+import '../../features/order/presentation/pages/my_order_page.dart';
 
 class AppRouter {
   static const String login = '/login';
@@ -59,11 +60,7 @@ class AppRouter {
         );
 
       case myOrders:
-        return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: Center(child: Text('Halaman Riwayat Pesanan')),
-          ),
-        );
+        return MaterialPageRoute(builder: (_) => const MyOrdersPage());
 
       default:
         return MaterialPageRoute(
