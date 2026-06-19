@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skenaid_front/core/routes/app_router.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/order_provider.dart';
 import '../../data/models/order_model.dart';
-import 'package:intl/intl.dart';
 
 class MyOrdersPage extends StatefulWidget {
   const MyOrdersPage({super.key});
@@ -54,7 +54,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           : ListView.separated(
               padding: const EdgeInsets.all(16),
               itemCount: orderProv.myOrders.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              separatorBuilder: (_, _) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final order = orderProv.myOrders[index];
                 return _buildOrderCard(order);
@@ -69,9 +69,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
     return GestureDetector(
       onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Menuju Detail Pesanan...')),
-        );
+        Navigator.pushNamed(context, AppRouter.orderDetail, arguments: order);
       },
       child: Container(
         padding: const EdgeInsets.all(16),
