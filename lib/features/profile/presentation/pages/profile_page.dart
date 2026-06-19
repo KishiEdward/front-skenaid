@@ -18,8 +18,10 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final authProv = context.read<AuthProvider>();
-      if (authProv.firebaseUser != null) {
-        context.read<ProfileProvider>().fetchProfile();
+      final String? customToken = authProv.backendToken;
+
+      if (customToken != null && customToken.isNotEmpty) {
+        context.read<ProfileProvider>().fetchProfile(customToken);
       }
     });
   }

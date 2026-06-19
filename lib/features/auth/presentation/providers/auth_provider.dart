@@ -120,6 +120,8 @@ class AuthProvider extends ChangeNotifier {
 
       await SecureStorageService.saveToken(backendToken);
 
+      _backendToken = backendToken;
+
       _status = AuthStatus.authenticated;
       notifyListeners();
       return true;

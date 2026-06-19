@@ -13,22 +13,32 @@ class ProfileProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  Future<void> fetchProfile() async {
+  Future<void> fetchProfile(String customToken) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      final url = Uri.parse('${ApiConstants.baseUrl}/v1/user/profile');
-      final response = await http.get(url);
+      final url = Uri.parse('${ApiConstants.baseUrl}/user/profile');
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $customToken',
+        },
+      );
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         if (responseData['success'] == true) {
           _user = UserModel.fromJson(responseData['data']);
+        } else {
+          _errorMessage =
+              responseData['message'] ?? 'Gagal mengambil data profil';
         }
       } else {
-        _errorMessage = 'Gagal mengambil data profil';
+        _errorMessage = 'Gagal memuat profil. Kode: ${response.statusCode}';
       }
     } catch (e) {
       _errorMessage = 'Terjadi kesalahan jaringan: $e';
