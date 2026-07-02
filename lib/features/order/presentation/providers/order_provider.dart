@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,14 +8,31 @@ import '../../data/models/order_model.dart';
 import '../../data/repositories/order_repository_impl.dart';
 import '../../domain/repositories/order_repository.dart';
 
+enum OrderStatus { initial, loading, success, error }
+enum PaymentCheckStatus { idle, checking, paid }
+
 class OrderProvider extends ChangeNotifier {
   final OrderRepository _repository = OrderRepositoryImpl();
 
+  final OrderStatus _checkoutStatus = OrderStatus.initial;
+
+  OrderModel? _lastOrder;
   List<OrderModel> _myOrders = [];
+  String? _error;
+
+  PaymentCheckStatus _paymentCheckStatus = PaymentCheckStatus.idle;
+  Timer? _pollingTimer;
+
+  OrderStatus get checkoutStatus => _checkoutStatus;
+  OrderModel? get lastOrder => _lastOrder;
+  List<OrderModel> get myOrders => _myOrders;
+  String? get error => _error;
+  PaymentCheckStatus get paymentCheckStatus => _paymentCheckStatus;
+
+  
   bool _isLoading = false;
   String? _errorMessage;
 
-  List<OrderModel> get myOrders => _myOrders;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -78,4 +96,38 @@ class OrderProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> checkPaymentStatus(int orderId) async {
+    _paymentCheckStatus = PaymentCheckStatus.checking;
+    notifyListeners();
+    try {
+      final updatedOrder = await _repository.getOrderDetail(orderId);
+      _lastOrder = updatedOrder;
+      
+      if (updatedOrder.status != 'pending') {
+        _paymentCheckStatus = PaymentCheckStatus.paid;
+      } else {
+        _paymentCheckStatus = PaymentCheckStatus.idle;
+      }
+    } catch (e) {
+      _paymentCheckStatus = PaymentCheckStatus.idle;
+    }
+    notifyListeners();
+  }
+
+  void startPaymentPolling(int orderId) {
+    _pollingTimer?.cancel();
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      checkPaymentStatus(orderId);
+      if (_paymentCheckStatus == PaymentCheckStatus.paid) {
+        timer.cancel();
+      }
+    });
+  }
+
+  void stopPaymentPolling() {
+    _pollingTimer?.cancel();
+    _paymentCheckStatus = PaymentCheckStatus.idle;
+  }
+
 }
