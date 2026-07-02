@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:skenaid_front/core/services/skenaid_pay_service.dart';
 import 'firebase_options.dart';
 
 import 'core/theme/app_theme.dart';
@@ -19,7 +20,13 @@ import 'features/profile/presentation/providers/profile_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+  ;
+  await SkenaidPayService().init();
 
   runApp(const MyApp());
 }
