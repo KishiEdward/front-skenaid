@@ -70,27 +70,57 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }
 
   Future<void> _processCheckout() async {
+    if (_selectedPaymentMethod.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pilih metode pembayaran terlebih dahulu'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final orderProv = context.read<OrderProvider>();
     final cartProv = context.read<CartProvider>();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
 
     final order = await orderProv.checkout(
       shippingAddress: _selectedAddress,
       notes: "Pengiriman: $_selectedShipping",
-      paymentMethod: _selectedPaymentMethod,
+      paymentMethod: _selectedPaymentMethod, 
     );
 
     if (!mounted) return;
+    Navigator.pop(context); 
 
     if (order != null) {
       await cartProv.clearCart();
       if (!mounted) return;
 
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRouter.orderSuccess,
-        (route) => route.settings.name == AppRouter.dashboard,
-        arguments: order,
-      );
+      final needsPaymentFlow = 
+          order.paymentMethod == 'virtual_account' ||
+          order.paymentMethod == 'skewallet';
+
+      if (needsPaymentFlow) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRouter.paymentPending,
+          (route) => route.settings.name == AppRouter.dashboard,
+          arguments: order,
+        );
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRouter.orderSuccess,
+          (route) => route.settings.name == AppRouter.dashboard,
+          arguments: order,
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -365,7 +395,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             mainAxisSpacing: 12,
             childAspectRatio: 1.8,
             children: [
-              _buildPaymentGridItem('GoPay', 'gopay', isWallet: true),
+              _buildPaymentGridItem('skewallet', 'skewallet', isWallet: true),
               _buildPaymentGridItem('OVO', 'ovo', isWallet: true),
               _buildPaymentGridItem('DANA', 'dana', isWallet: true),
               _buildPaymentGridItem('ShopeePay', 'shopeepay', isWallet: true),
