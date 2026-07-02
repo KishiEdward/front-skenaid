@@ -274,6 +274,10 @@ class OrderDetailPage extends StatelessWidget {
       bgColor = Colors.blue.shade50;
       textColor = Colors.blue.shade800;
       label = 'Diproses';
+    } else if (status.toLowerCase() == 'completed') {
+      bgColor = Colors.green.shade50;
+      textColor = Colors.green.shade800;
+      label = 'Selesai';
     }
 
     return Container(
