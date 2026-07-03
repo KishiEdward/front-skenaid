@@ -31,9 +31,7 @@ Project ini adalah aplikasi frontend mobile untuk platform e-commerce Skenaid, d
 
 Lihat demo aplikasi dan alur fitur yang tersedia dalam video berikut.
 
-**[Watch Full Demo on YouTube]()**
-
-Alternative link: **[Google Drive Demo]()**
+**[Watch Full Demo on YouTube](https://youtu.be/nH3QIb8kl5Y?si=aauAhLBWTEnz3KKc)**
 
 ## Fitur Utama
 
