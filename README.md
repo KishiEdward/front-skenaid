@@ -37,9 +37,9 @@ Lihat demo aplikasi dan alur fitur yang tersedia dalam video berikut.
 
 **Belum login dan fitur login, regis**
 
-| <img src="assets/screenshots/1_notlogin.jpg" width="200"/> | <img src="assets/screenshots/2_notlogin.jpg" width="200"/> |
-| <img src="assets/screenshots/3_loginpage.jpg" width="200"/> | <img src="assets/screenshots/4_resetpass.jpg" width="200"/> |
-| <img src="assets/screenshots/5_register.jpg" width="200"/> |
+| <img src="assets/screenshots/1_notlogin.jpg" width="250"/> | <img src="assets/screenshots/2_notlogin.jpg" width="250"/> |
+| <img src="assets/screenshots/3_loginpage.jpg" width="250"/> | <img src="assets/screenshots/4_resetpass.jpg" width="250"/> |
+| <img src="assets/screenshots/5_register.jpg" width="250"/> |
 
 
 
