@@ -37,6 +37,7 @@ Lihat demo aplikasi dan alur fitur yang tersedia dalam video berikut.
 
 **Belum login dan fitur login, regis**
 
+| :---: | :---: |
 | <img src="assets/screenshots/1_notlogin.jpg" width="250"/> | <img src="assets/screenshots/2_notlogin.jpg" width="250"/> |
 | <img src="assets/screenshots/3_loginpage.jpg" width="250"/> | <img src="assets/screenshots/4_resetpass.jpg" width="250"/> |
 | <img src="assets/screenshots/5_register.jpg" width="250"/> |
@@ -44,14 +45,15 @@ Lihat demo aplikasi dan alur fitur yang tersedia dalam video berikut.
 
 
 **Fitur Dashboard & Cart**
+| :---: | :---: | :---: |
 
 | <img src="assets/screenshots/6_dashboard.jpg" width="250"/> | <img src="assets/screenshots/7_cart.jpg" width="250"/> | <img src="assets/screenshots/8_cartwithnecklace.jpg" width="250"/> |
 
-**Tabel 3: Fitur Cart, Order & Pembayaran**
+**Checkout dan sukses**
 
-| <img src="URL_GAMBAR_19" width="200"/> | <img src="URL_GAMBAR_20" width="200"/> | <img src="URL_GAMBAR_21" width="200"/> |
-| <img src="URL_GAMBAR_22" width="200"/> | <img src="URL_GAMBAR_23" width="200"/> | <img src="URL_GAMBAR_24" width="200"/> |
-| <img src="URL_GAMBAR_25" width="200"/> | <img src="URL_GAMBAR_26" width="200"/> | <img src="URL_GAMBAR_27" width="200"/> |
+| :---: | :---: | :---: |
+| <img src="assets/screenshots/9_checkout.jpg" width="250"/> | <img src="assets/screenshots/10_checkout.jpg" width="250"/> | <img src="assets/screenshots/11_checkout.jpg" width="250"/> |
+| <img src="assets/screenshots/12_success.jpg" width="250"/> | <img src="assets/screenshots/13_detail.jpg" width="250"/> | <img src="assets/screenshots/14_logout.jpg" width="250"/> |
 
 ## Fitur Utama
 
