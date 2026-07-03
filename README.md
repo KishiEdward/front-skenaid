@@ -33,6 +33,32 @@ Lihat demo aplikasi dan alur fitur yang tersedia dalam video berikut.
 
 **[Watch Full Demo on YouTube](https://youtu.be/nH3QIb8kl5Y?si=aauAhLBWTEnz3KKc)**
 
+### Screenshot Aplikasi
+
+**Belum login dan fitur login, regis**
+
+| <img src="assets/screenshots/1_notlogin.jpg" width="200"/> | <img src="assets/screenshots/2_notlogin.jpg" width="200"/> |
+| <img src="assets/screenshots/3_loginpage.jpg" width="200"/> | <img src="assets/screenshots/4_resetpass.jpg" width="200"/> |
+| <img src="assets/screenshots/5_register.jpg" width="200"/> |
+
+
+
+**Fitur Dashboard & Produk**
+
+| Tangkapan Layar 1 | Tangkapan Layar 2 | Tangkapan Layar 3 |
+| :---: | :---: | :---: |
+| <img src="URL_GAMBAR_10" width="200"/> | <img src="URL_GAMBAR_11" width="200"/> | <img src="URL_GAMBAR_12" width="200"/> |
+| <img src="URL_GAMBAR_13" width="200"/> | <img src="URL_GAMBAR_14" width="200"/> | <img src="URL_GAMBAR_15" width="200"/> |
+| <img src="URL_GAMBAR_16" width="200"/> | <img src="URL_GAMBAR_17" width="200"/> | <img src="URL_GAMBAR_18" width="200"/> |
+
+**Tabel 3: Fitur Cart, Order & Pembayaran**
+
+| Tangkapan Layar 1 | Tangkapan Layar 2 | Tangkapan Layar 3 |
+| :---: | :---: | :---: |
+| <img src="URL_GAMBAR_19" width="200"/> | <img src="URL_GAMBAR_20" width="200"/> | <img src="URL_GAMBAR_21" width="200"/> |
+| <img src="URL_GAMBAR_22" width="200"/> | <img src="URL_GAMBAR_23" width="200"/> | <img src="URL_GAMBAR_24" width="200"/> |
+| <img src="URL_GAMBAR_25" width="200"/> | <img src="URL_GAMBAR_26" width="200"/> | <img src="URL_GAMBAR_27" width="200"/> |
+
 ## Fitur Utama
 
 - Autentikasi pengguna (login, register) dengan Firebase Authentication
